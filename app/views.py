@@ -9,6 +9,16 @@ def index():
     return render_template('index_dev.html')
 
 
+@app.route('/natural_semantic', methods=['GET', 'POST'])
+def natural_semantic():
+    return render_template('natural_semantic.html')
+
+
+@app.route('/image_identification', methods=['GET', 'POST'])
+def image_identification():
+    return render_template('image_identification.html')
+
+
 @app.route('/index')
 def index1():
     return render_template('index.html')
@@ -17,6 +27,11 @@ def index1():
 @app.route('/index2')
 def index2():
     return render_template('index2.html')
+
+
+@app.route('/pages/<item>')
+def pages(item):
+    return to_template(item)
 
 
 @app.route('/pages/charts/<item>')
