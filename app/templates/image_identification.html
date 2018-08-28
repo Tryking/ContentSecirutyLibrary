@@ -1,15 +1,58 @@
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename="bootstrap-fileinput/css/fileinput.css") }}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="{{ url_for('static', filename="bootstrap-fileinput/js/fileinput.js") }}"></script>
+    <script src="{{ url_for('static', filename="bootstrap-fileinput/js/plugins/sortable.js") }}"></script>
+
+</head>
 {% extends "base.html" %}
+
 {% block body %}
     <div class="container">
-        <div class="col-md-4">
-            <div class="form-group">
-                <label>IMAGE_IDENTIFICATION</label>
-                <select class="form-control select2" style="width: 100%;">
-                    <option selected="selected">1天1次</option>
-                    <option>7天1次</option>
-                </select>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-8" aria-orientation="vertical">
+                <form enctype="multipart/form-data">
+                    <div class="file-loading">
+                        <input id="kv-explorer" type="file" multiple>
+                    </div>
+                    <br>
+                    <div class="file-loading">
+                        <input id="file-0a" class="file" type="file" multiple data-min-file-count="0">
+                    </div>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-default">Reset</button>
+                </form>
             </div>
-            <!-- /.form-group -->
+        </div>
+        <div class="row" style="margin-top: 100px;background: #f71752;">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename="dist/img/user1-128x128.jpg") }}" alt="User Image">
+                <a class="users-list-name" href="#">Alexander Pierce</a>
+                <span class="users-list-date">Today</span>
+            </div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename="dist/img/user1-128x128.jpg") }}" alt="User Image">
+                <a class="users-list-name" href="#">Alexander Pierce</a>
+                <span class="users-list-date">Today</span>
+            </div>
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename="dist/img/user1-128x128.jpg") }}" alt="User Image">
+                <a class="users-list-name" href="#">Alexander Pierce</a>
+                <span class="users-list-date">Today</span>
+            </div>
         </div>
     </div>
 {% endblock %}
+
+
+<script>
+    $("#import_file").fileinput({
+        theme: 'fa',
+        language: 'fr',
+        uploadUrl: '#',
+        allowedFileExtensions: ['jpg', 'png', 'gif']
+    });
+
+</script>
