@@ -56,7 +56,11 @@ def query_data():
     page_size = result['page_size']
     page_number = result['page_num']
     # 查询数据库中的数据返回
-    return render_template('index.html')
+    result = db_monitor.list_data(int(page_size), int(page_number))
+    data = dict()
+    data['rows']=result
+    data['total'] = db_monitor.count()
+    return json.dumps(data)
 
 
 @app.route('/pages/<item>')

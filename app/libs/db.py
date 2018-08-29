@@ -31,3 +31,24 @@ class DbMonitor:
         self.db['image'].update_one(filter={'path': file_path},
                                     update={'$set': {'porn': porn, 'sexy': sexy, 'normal': normal, 'cost': cost, 'update_time': get_udpate_time()}}
                                     )
+
+    def list_data(self, page_size, page_number):
+        """
+        按照页数和每页数量查找数据
+        :param page_size:
+        :param page_number:
+        :return:
+        """
+        result = self.db['image'].find({}).sort([('upload_time', pymongo.DESCENDING)]).skip((page_number - 1) * page_size).limit(page_size)
+        result = list(result)
+        for data in result:
+            del data['_id']
+        return result
+
+    def count(self):
+        """
+        获取总数
+        :return:
+        """
+        count = self.db['image'].find().count()
+        return count

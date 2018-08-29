@@ -36,75 +36,107 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <div id="file_wrap">
-        <form method="POST" role="form" id="S1" enctype="multipart/form-data">
-            <div class="file-loading">
-                <input id="file-pic" class="file" type="file" multiple>
-            </div>
-        </form>
-    </div>
-    <div id="result" hidden>
-        <!-- 表格显示 -->
-        <div class="row">
-            <div class="col-md-12" style="margin-top:20px;">
-                <div class="panel panel-info">
-                    <div class="panel-heading">审核结果</div>
-                    <table id="table" class="table table-striped table-bordered table-hover datatable">
-                        <thead id="tem">
-                        <th id="file_name">文件</th>
-                        <th id="upload_time">上传时间</th>
-                        <th id="porn">色情</th>
-                        <th id="sexy">性感</th>
-                        <th id="normal">正常</th>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
 
-        <!-- 页面底部显示 -->
-        <!-- 每页显示几条记录 -->
-        <div id="bottomTool" class="row-fluid">
-            <div class="span6" style="width:25%;;margin-right: 10px;">
-                <div class="dataTables_length" id="DataTables_Table_0_length">
-                    <label>
-                        每页
-                        <select id="pageSize" onchange="research()"
-                                aria-controls="DataTables_Table_0" size="1" name="DataTables_Table_0_length">
-                            <option selected="selected" value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        条记录
-                    </label>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            图像鉴定
+            <small id="small_title">上传图片</small>
+        </h1>
+        <div class="breadcrumb">
+            <button onclick="switch_watch()"><a href="#" id="hint"><i class="fa fa-dashboard"></i>点击查看历史结果</a></button>
+        </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+
+        <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+        <div id="file_wrap">
+            <form method="POST" role="form" id="S1" enctype="multipart/form-data">
+                <div class="file-loading">
+                    <input id="file-pic" class="file" type="file" multiple>
+                </div>
+            </form>
+        </div>
+        <div id="result" hidden>
+            <!-- 表格显示 -->
+            <div class="row">
+                <div class="col-md-12" style="margin-top:20px;">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">审核结果</div>
+                        <table id="table" class="table table-striped table-bordered table-hover datatable">
+                            <thead id="tem">
+                            <th id="file_name">文件</th>
+                            <th id="upload_time">上传时间</th>
+                            <th id="porn">色情</th>
+                            <th id="sexy">性感</th>
+                            <th id="normal">正常</th>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <!-- 显示第 1 至 10 项记录，共 57 项 -->
-            <div class="span6" style="width:25%;">
-                <div id="DataTables_Table_0_info" class="dataTables_info">显示第 1 至 10 项记录，共 57 项</div>
-            </div>
-            <!-- 第2页 -->
-            <div class="span6" style="width:30%;">
-                <div class="dataTables_paginate paging_bootstrap pagination">
-                    <ul id="previousNext">
-                        <li onclick="previous()" class="prev disabled"><a id="previousPage" href="#">← 上一页</a></li>
-                        <div id="page" style="float:left;">
-                            <select id="pageNum" onchange="search()"
-                                    style="width:50PX;margin-right:1px;" aria-controls="DataTables_Table_0" size="1" name="DataTables_Table_0_length">
-                                <option selected="selected" value="1">1</option>
-                            </select>
+
+            <!-- 页面底部显示 -->
+            <!-- 每页显示几条记录 -->
+            <div id="bottomTool" class="container">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div style="width:25%">
+                            <div class="dataTables_length" id="DataTables_Table_0_length">
+                                <label>
+                                    每页
+                                    <select id="pageSize" onchange="research()"
+                                            aria-controls="DataTables_Table_0" size="1" name="DataTables_Table_0_length">
+                                        <option selected="selected" value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    条记录
+                                </label>
+                            </div>
                         </div>
-                        <li class="next" onclick="next()"><a id="nextPage" href="#">下一页 → </a></li>
-                    </ul>
+                    </div>
+                    <div class="col-md-2">
+                        <!-- 显示第 1 至 10 项记录，共 57 项 -->
+                        <div style="float: right">
+                            <div id="DataTables_Table_0_info" class="dataTables_info">显示第 1 至 10 项记录。\n 共 57 项</div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <!-- 第2页 -->
+                        <div style="margin-right: 10%;float: right;">
+                            <div class="dataTables_paginate paging_bootstrap pagination" style="float: left;">
+                                <div id="previousNext">
+                                    <div onclick="previous()" class="prev disabled"><a id="previousPage" href="#">← 上一页</a></div>
+                                    <div id="page" style="float:left;">
+                                        <select id="pageNum" onchange="search()"
+                                                style="width:50PX;margin-right:1px;" aria-controls="DataTables_Table_0" size="1"
+                                                name="DataTables_Table_0_length">
+                                            <option selected="selected" value="1">1</option>
+                                        </select>
+                                    </div>
+                                    <div class="next" onclick="next()"><a id="nextPage" href="#">下一页 → </a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
-    </div>
+
+    </section>
+    <!-- /.content -->
+
+
     <script>
+
         $('#file-pic').fileinput({
             theme: 'fa',
             language: 'zh',
@@ -114,6 +146,9 @@
             console.log(data);
             $('#file_wrap').hide(true);
             $('#result').show(true);
+            $('#small_title').text('查看结果');
+            $('#hint').text('点击继续上传图片');
+            search();
             //搜索按钮绑定回车事件
             document.onkeydown = function (event) {
                 if (event.keyCode === 13) {
@@ -123,6 +158,20 @@
                 }
             }
         });
+
+        function switch_watch() {
+            const show_text = $('#hint').text();
+            if (show_text === '点击继续上传图片') {
+                $('#file_wrap').show(true);
+                $('#result').hide(true);
+                $('#hint').text('点击查看历史结果')
+            } else {
+                $('#file_wrap').hide(true);
+                $('#result').show(true);
+                search();
+                $('#hint').text('点击继续上传图片');
+            }
+        }
 
         //下一步
         function next() {
@@ -169,7 +218,6 @@
             search();
         }
 
-        //搜索，模糊查询学生违纪信息
         function search() {
             //得到查询条件
             const searchString = $("#searchString").val();
@@ -194,7 +242,6 @@
                     const pageEntity = JSON.parse(data);
                     //得到结果集
                     const obj = pageEntity["rows"];
-
                     //将除模板行的thead删除，即删除之前的数据重新加载
                     $("thead").eq(0).nextAll().remove();
                     //将获取到的数据动态的加载到table中
@@ -203,12 +250,11 @@
                         const row = $("#tem").clone();
 
                         //给每一行赋值
-                        row.find("#studentId").text(obj[i].studentId); //学号
-                        row.find("#studentName").text(obj[i].studentName);   //学生姓名
-                        row.find("#courseId").text(obj[i].courseId);     //课程名称
-                        row.find("#examRoomId").text(obj[i].examRoomId);     //考场号
-                        row.find("#className").text(obj[i].className);     //所属班级
-                        row.find("#teacherId").text(obj[i].teacherId);     //监考教师Id
+                        row.find("#file_name").text(obj[i].path);
+                        row.find("#upload_time").text(obj[i].upload_time);
+                        row.find("#porn").text(obj[i].porn);
+                        row.find("#sexy").text(obj[i].sexy);
+                        row.find("#normal").text(obj[i].normal);
 
                         //将新行添加到表格中
                         row.appendTo("#table");
@@ -234,8 +280,8 @@
                     //输出"显示第 1 至 10 项记录，共 57 项"
                     document.getElementById("DataTables_Table_0_info").innerHTML =
                         "显示第" + pageNumBegin.toString()
-                        + " 至 " + pageNumEnd.toString()
-                        + " 项记录，共 " + pageNumCount.toString() + " 项";
+                        + " - " + pageNumEnd.toString()
+                        + " 项记录，\n 共 " + pageNumCount.toString() + " 项";
 
                     //显示所有的页码数
                     const pageSelect = document.getElementById("page");
