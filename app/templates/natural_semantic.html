@@ -1,10 +1,45 @@
+<head>
+    <!-- bootstrap 4.x is supported. You can also use the bootstrap css 3.3.x versions -->
+    <link rel="stylesheet" href="{{ url_for('static', filename="bower_components/bootstrap/dist/css/bootstrap.css") }}">
+    <link href="{{ url_for('static', filename="bootstrap-fileinput/css/fileinput.css") }}" media="all" rel="stylesheet" type="text/css"/>
+
+    <!-- if using RTL (Right-To-Left) orientation, load the RTL CSS file after fileinput.css by uncommenting below -->
+    <!-- link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/css/fileinput-rtl.min.css" media="all" rel="stylesheet" type="text/css" /-->
+    <script src="{{ url_for('static', filename="bower_components/jquery/dist/jquery.min.js") }}" type="text/javascript"></script>
+    <!-- piexif.min.js is needed for auto orienting image files OR when restoring exif data in resized images and when you
+        wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="{{ url_for('static', filename="bootstrap-fileinput/js/plugins/piexif.js") }}" type="text/javascript"></script>
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview.
+        This must be loaded before fileinput.min.js -->
+    <script src="{{ url_for('static', filename="bootstrap-fileinput/js/plugins/sortable.js") }}" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for
+        HTML files. This must be loaded before fileinput.min.js -->
+    <script src="{{ url_for('static', filename="bootstrap-fileinput/js/plugins/purify.js") }}" type="text/javascript"></script>
+    {#    <!-- popper.min.js below is needed if you use bootstrap 4.x. You can also use the bootstrap js#}
+    {#       3.3.x versions without popper.min.js. -->#}
+    {#    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>#}
+
+    <!-- bootstrap.min.js below is needed if you wish to zoom and preview file content in a detail modal
+        dialog. bootstrap 4.x is supported. You can also use the bootstrap js 3.3.x versions. -->
+    <script src="{{ url_for('static', filename="bower_components/bootstrap/dist/js//bootstrap.js") }}" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="{{ url_for('static', filename="bootstrap-fileinput/js/fileinput.js") }}"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/4.4.9/themes/fa/theme.js"></script>
+    <!-- optionally if you need translation for your language then include  locale file as mentioned below -->
+    <script src="{{ url_for('static', filename="bootstrap-fileinput/js/locales/zh.js") }}"></script>
+
+    <!-- Slimscroll -->
+    <script src="{{ url_for('static', filename="bower_components/jquery-slimscroll/jquery.slimscroll.min.js") }}"></script>
+
+</head>
 {% extends "base.html" %}
 {% block body %}
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Page Header
-            <small>Optional description</small>
+            自然语义
+            <small id="small_title">NLP</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
@@ -15,5 +50,116 @@
     <!-- Main content -->
     <section class="content container-fluid">
 
+        <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">NLP实验室</h3>
+            </div>
+            <div class="box-body">
+                <input class="form-control input-lg" id="search_input" type="text" placeholder="请输入词句">
+                <br>
+                <button onclick="word_check()">查询</button>
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">结果展示</h3>
+            </div>
+            <div class="box-body table-responsive no-padding">
+
+                <div class="box-body">
+                    <div class="panel-group">
+                        <label class="col-sm-2 control-label">涉政</label>
+
+                        <div class="col-sm-10">
+                            <a class="form-control" id="politics">正常</a>
+                        </div>
+                    </div>
+                    <div class="panel-group">
+                        <label class="col-sm-2 control-label">涉黄</label>
+
+                        <div class="col-sm-10">
+                            <a class="form-control" id="porn">正常</a>
+                        </div>
+                    </div>
+                    <div class="panel-group">
+                        <label class="col-sm-2 control-label">词联想</label>
+
+                        <div class="col-sm-10">
+                            <a class="form-control" id="word_association">无</a>
+                        </div>
+                    </div>
+                    <div class="panel-group">
+                        <label class="col-sm-2 control-label">词性分析</label>
+
+                        <div class="col-sm-10">
+                            <a class="form-control" id="part_of_speech">无</a>
+                        </div>
+                    </div>
+                    <div class="panel-group">
+                        <label class="col-sm-2 control-label">摘要</label>
+
+                        <div class="col-sm-10">
+                            <a class="form-control" id="abstract">无</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box-footer -->
+        </div>
+        <!-- /.box-body -->
     </section>
+
+    <script>
+        function word_check() {
+            //得到查询string
+            const searchString = $("#search_input").val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: "text_check",
+                data: {
+                    "search_string": searchString,
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    const is_politics = data['涉政']['是否涉政'];
+                    const is_porn = data['涉黄']['是否涉黄'];
+                    const part_of_speech = data['词性分析'];
+                    const word_association = data['词联想'];
+                    const abstract = data['摘要']['摘要'];
+
+                    $('#politics').text(is_politics);
+                    $('#porn').text(is_porn);
+                    $('#abstract').text(abstract);
+
+                    let part_of_speech_s = '';
+                    for (let _key in part_of_speech) {
+                        part_of_speech_s += _key;
+                        part_of_speech_s += ':';
+                        part_of_speech_s += part_of_speech[_key];
+                        part_of_speech_s += '--';
+                    }
+                    $('#part_of_speech').text(part_of_speech_s);
+
+                    let word_association_s = '';
+                    for (let _key in word_association) {
+                        word_association_s += _key;
+                        word_association_s += ':';
+                        word_association_s += word_association[_key];
+                        word_association_s += '--';
+                    }
+                    $('#word_association').text(word_association_s);
+
+                }
+            });
+        }
+
+    </script>
 {% endblock %}

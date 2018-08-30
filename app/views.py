@@ -1,3 +1,4 @@
+import requests
 from jinja2 import TemplateNotFound
 
 from app import app
@@ -58,6 +59,19 @@ def query_data():
     data['rows'] = result
     data['total'] = db_monitor.count()
     return json.dumps(data)
+
+
+def request_read_text_check(search_string):
+    url = TEXT_CHECK_URL % search_string
+    result = requests.get(url=url)
+    return result.content
+
+
+@app.route('/text_check', methods=['POST'])
+def text_check():
+    request_data = request.form.to_dict()
+    search_string = request_data['search_string']
+    return request_read_text_check(search_string)
 
 
 @app.route('/pages/<item>')

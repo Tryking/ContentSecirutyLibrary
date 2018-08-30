@@ -26,3 +26,4 @@ SFTP_USER = 'root'
 SFTP_PWD = 'zaqwsx'
 
 GPU_URL = 'http://www.baidu.com'
+TEXT_CHECK_URL = 'http://10.167.64.33:8888/lookfor?cont=%s'
