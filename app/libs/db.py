@@ -29,7 +29,8 @@ class DbMonitor:
         更新图像的结果值
         """
         self.db['image'].update_one(filter={'path': file_path},
-                                    update={'$set': {'porn': porn, 'sexy': sexy, 'normal': normal, 'cost': cost, 'update_time': get_udpate_time()}}
+                                    update={'$set': {'porn': porn, 'sexy': sexy, 'normal': normal, 'cost': cost, 'update_time': get_udpate_time(),
+                                                     'has_identify': True}}
                                     )
 
     def list_data(self, page_size, page_number):
@@ -39,7 +40,8 @@ class DbMonitor:
         :param page_number:
         :return:
         """
-        result = self.db['image'].find({}).sort([('upload_time', pymongo.DESCENDING)]).skip((page_number - 1) * page_size).limit(page_size)
+        result = self.db['image'].find({'has_identify': True}).sort([('upload_time', pymongo.DESCENDING)]).skip(
+            (page_number - 1) * page_size).limit(page_size)
         result = list(result)
         for data in result:
             del data['_id']

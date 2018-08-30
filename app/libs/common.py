@@ -1,5 +1,4 @@
 import inspect
-import json
 import logging
 import logging.handlers
 import os
@@ -7,11 +6,6 @@ import random
 import socket
 import re
 import time
-
-import requests
-from fake_useragent import UserAgent
-
-PROXY_URL = 'http://webapi.http.zhimacangku.com/getip?num=1&type=1&pro=&city=0&yys=0&port=1&pack=23790&ts=0&ys=0&cs=0&lb=1&sb=0&pb=4&mr=1&regions='
 
 
 def init_log(console_level, file_level, logfile):
@@ -107,41 +101,6 @@ def get_proxy():
     """
     proxys = [None]
     return random.choice(proxys)
-
-
-def test_ip_available(proxy_ip, url='https://www.baidu.com'):
-    """
-    测试代理IP是否可用
-    :param ip:
-    :return:
-    """
-    try:
-        proxies = {"http": proxy_ip, "https": proxy_ip}
-        r = requests.get(url=url, headers=get_headers(), timeout=5,
-                         proxies=proxies)
-        if r.ok:
-            return True
-        else:
-            return False
-    except Exception as e:
-        return False
-
-
-def get_available_ip_proxy():
-    """
-    获取可用IP（从IP池获取，并测试是否可用）
-    :return:
-    """
-    try:
-        proxys = requests.get(PROXY_URL).text
-        write_file_log('获取代理：' + str(proxys))
-        if judge_legal_ip(proxys.strip(), contains_port=True):
-            proxy = 'http://%s' % (proxys.strip())
-            return proxy
-        else:
-            return None
-    except Exception as e:
-        return None
 
 
 def get_udpate_time():
