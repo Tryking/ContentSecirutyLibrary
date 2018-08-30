@@ -86,8 +86,8 @@
             <!-- 每页显示几条记录 -->
             <div id="bottomTool" class="container">
                 <div class="row">
-                    <div class="col-md-5">
-                        <div style="width:25%">
+                    <div class="col-md-4">
+                        <div>
                             <div class="dataTables_length" id="DataTables_Table_0_length">
                                 <label>
                                     每页
@@ -103,16 +103,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <!-- 显示第 1 至 10 项记录，共 57 项 -->
-                        <div style="float: right">
-                            <div id="DataTables_Table_0_info" class="dataTables_info">显示第 1 至 10 项记录。\n 共 57 项</div>
+                        <div>
+                            <div id="DataTables_Table_0_info" class="dataTables_info">显示第 1 至 10 项记录。共 57 项</div>
                         </div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <!-- 第2页 -->
                         <div style="margin-right: 10%;float: right;">
-                            <div class="dataTables_paginate paging_bootstrap pagination" style="float: left;">
+                            <div class="dataTables_paginate paging_bootstrap pagination">
                                 <div id="previousNext">
                                     <div onclick="previous()" class="prev disabled"><a id="previousPage" href="#">← 上一页</a></div>
                                     <div id="page" style="float:left;">
@@ -281,7 +281,7 @@
                     document.getElementById("DataTables_Table_0_info").innerHTML =
                         "显示第" + pageNumBegin.toString()
                         + " - " + pageNumEnd.toString()
-                        + " 项记录，\n 共 " + pageNumCount.toString() + " 项";
+                        + " 项记录，共 " + pageNumCount.toString() + " 项";
 
                     //显示所有的页码数
                     const pageSelect = document.getElementById("page");

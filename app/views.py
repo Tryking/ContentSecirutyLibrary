@@ -1,12 +1,8 @@
-import asyncio
-import os
-
 from jinja2 import TemplateNotFound
 
 from app import app
 from flask import render_template, make_response, request, json
 from .libs.db import *
-from .libs.common import *
 from .libs.SFTP import *
 
 from concurrent.futures import ThreadPoolExecutor
@@ -20,8 +16,9 @@ if not os.path.exists('logs'):
     os.makedirs('logs')
 if not os.path.exists(DATA_SAVE_DIR):
     os.makedirs(DATA_SAVE_DIR)
-print('开启')
-init_log(LOG_TYPE, LOG_TYPE, logfile=os.path.join('logs', str(os.path.split(__file__)[1].split(".")[0]) + '.log'))
+
+init_log(logging.DEBUG, logging.DEBUG, logfile=os.path.join('logs', str(os.path.split(__file__)[1].split(".")[0]) + '_debug.log'))
+init_log(logging.ERROR, logging.ERROR, logfile=os.path.join('logs', str(os.path.split(__file__)[1].split(".")[0]) + '.log'))
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -58,7 +55,7 @@ def query_data():
     # 查询数据库中的数据返回
     result = db_monitor.list_data(int(page_size), int(page_number))
     data = dict()
-    data['rows']=result
+    data['rows'] = result
     data['total'] = db_monitor.count()
     return json.dumps(data)
 
