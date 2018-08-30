@@ -54,7 +54,7 @@
         <!--------------------------
         | Your Page Content Here |
         -------------------------->
-        <div id="file_wrap">
+        <div id="file_wrap" style="height: 70%;">
             <form method="POST" role="form" id="S1" enctype="multipart/form-data">
                 <div class="file-loading">
                     <input id="file-pic" class="file" type="file" multiple>
@@ -137,6 +137,11 @@
 
     <script>
 
+
+        $(document).ready(function () {
+            $('#choose_natural_semantic').removeClass('active');
+            $('#choose_image_identification').addClass('active');
+        });
         $('#file-pic').fileinput({
             theme: 'fa',
             language: 'zh',

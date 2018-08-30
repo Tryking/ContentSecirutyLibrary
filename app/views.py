@@ -24,7 +24,7 @@ init_log(logging.ERROR, logging.ERROR, logfile=os.path.join('logs', str(os.path.
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('home.html')
+    return render_template('natural_semantic.html')
 
 
 @app.route('/natural_semantic', methods=['GET', 'POST'])
