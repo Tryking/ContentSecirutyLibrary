@@ -44,6 +44,16 @@ class DbMonitor:
                                                  'has_identify': True}}
                                     )
 
+    def update_image_porn_new(self, file_path, cost, porn):
+        """
+        更新图像的鉴黄结果值
+        """
+        self.db['image'].update_one(filter={'path': file_path},
+                                    update={
+                                        '$set': {'porn': porn, 'porn_cost': cost, 'update_time': get_udpate_time(),
+                                                 'has_identify': True}}
+                                    )
+
     def list_data(self, page_size, page_number):
         """
         按照页数和每页数量查找数据

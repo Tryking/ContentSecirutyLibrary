@@ -31,6 +31,7 @@ TIMEOUT_10 = 30
 SFTP_USER_10 = 'ironic'
 SFTP_PWD_10 = 'r00tme10'
 
-PORN_URL = 'http://10.167.64.11:8080/resnet/predict'
+# PORN_URL = 'http://10.167.64.11:8080/resnet/predict'
+PORN_URL = 'http://10.167.64.11:5000/detect_porn?data=%s'
 POLITICS_URL = 'http://10.167.64.10:5000/detect?data=%s'
 TEXT_CHECK_URL = 'http://10.167.64.33:8888/lookfor?cont=%s'

@@ -222,6 +222,25 @@ def get_politics_result(remote_path, local_path):
         error(str(e), get_current_func_name())
 
 
+def get_porn_result_new(remote_path, local_path):
+    """
+    获取鉴黄结果
+    """
+    try:
+        debug('获取鉴黄结果请求：%s' % remote_path)
+        start = time.time()
+        url = PORN_URL % remote_path.replace('/', '%2F')
+        result = requests.get(url=url, timeout=20)
+        if result.status_code == 200:
+            result = json.loads(result.content)
+            porn = result['porn_level']
+            cost = round((time.time() - start), 2)
+            db_monitor.update_image_porn_new(local_path, cost, porn)
+
+    except Exception as e:
+        error(str(e), get_current_func_name())
+
+
 def get_porn_result(remote_path, local_path):
     """
     获取鉴黄结果
@@ -260,7 +279,7 @@ def handle_image_async(image_names, image_paths):
         for image_path in image_names:
             remote_path = os.path.join(REMOTE_SFTP_PATH, image_path)
             local_path = os.path.join(DATA_SAVE_DIR, image_path)
-            get_porn_result(remote_path, local_path)
+            get_porn_result_new(remote_path, local_path)
             get_politics_result(remote_path, local_path)
 
 
