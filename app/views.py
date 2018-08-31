@@ -213,6 +213,7 @@ def get_politics_result(remote_path, local_path):
         url = POLITICS_URL % remote_path.replace('/', '%2F')
         result = requests.get(url=url, timeout=20)
         if result.status_code == 200:
+            debug('涉政：%s，%s' % (remote_path, result.content))
             result = json.loads(result.content)
             politics = result['result']
             cost = round((time.time() - start), 2)
@@ -232,6 +233,7 @@ def get_porn_result_new(remote_path, local_path):
         url = PORN_URL % remote_path.replace('/', '%2F')
         result = requests.get(url=url, timeout=20)
         if result.status_code == 200:
+            debug('鉴黄：%s，%s' % (remote_path, result.content))
             result = json.loads(result.content)
             porn = result['porn_level']
             cost = round((time.time() - start), 2)
