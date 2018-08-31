@@ -76,8 +76,8 @@
                             <th id="upload_time">上传时间</th>
                             <th id="politics">涉政</th>
                             <th id="porn">色情</th>
-{#                            <th id="sexy">性感</th>#}
-{#                            <th id="normal">正常</th>#}
+                            {#                            <th id="sexy">性感</th>#}
+                            {#                            <th id="normal">正常</th>#}
                             </thead>
                             <tbody>
                             </tbody>
@@ -265,7 +265,11 @@
                         row.find("#porn").text(obj[i].porn);
                         {#row.find("#sexy").text(obj[i].sexy);#}
                         {#row.find("#normal").text(obj[i].normal);#}
-                        row.find("#politics").text(obj[i].politics);
+                        if ('politics' in obj[i]) {
+                            row.find("#politics").text(obj[i].politics);
+                        } else {
+                            row.find("#politics").text("无结果");
+                        }
 
                         //将新行添加到表格中
                         row.appendTo("#table");
