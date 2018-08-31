@@ -69,8 +69,12 @@
                         <div class="panel-heading">审核结果</div>
                         <table id="table" class="table table-striped table-bordered table-hover datatable">
                             <thead id="tem">
+                            <th>
+                                <img id="image" src="#" width="20%">
+                            </th>
                             <th id="file_name">文件</th>
                             <th id="upload_time">上传时间</th>
+                            <th id="politics">涉政</th>
                             <th id="porn">色情</th>
                             <th id="sexy">性感</th>
                             <th id="normal">正常</th>
@@ -255,11 +259,13 @@
                         const row = $("#tem").clone();
 
                         //给每一行赋值
+                        row.find("#image").attr("src", obj[i].path.replace("app", ""));
                         row.find("#file_name").text(obj[i].path);
                         row.find("#upload_time").text(obj[i].upload_time);
                         row.find("#porn").text(obj[i].porn);
                         row.find("#sexy").text(obj[i].sexy);
                         row.find("#normal").text(obj[i].normal);
+                        row.find("#politics").text(obj[i].politics);
 
                         //将新行添加到表格中
                         row.appendTo("#table");
@@ -318,7 +324,6 @@
                     /**给上一步下一步加颜色**/
                     //判断是否只有一页
                     if (pageCount === 1) {
-
                         //如果只有一页，上一步，下一步都为灰色
                         $("#previousPage").css("color", "#AAA");//给上一步加灰色
                         $("#nextPage").css("color", "#AAA");//给下一步加灰色

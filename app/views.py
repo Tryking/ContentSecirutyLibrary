@@ -53,6 +53,10 @@ def query_data():
     result = request.form.to_dict()
     page_size = result['page_size']
     page_number = result['page_num']
+    if not page_size:
+        page_size = 10
+    if not page_number:
+        page_number = 1
     # 查询数据库中的数据返回
     result = db_monitor.list_data(int(page_size), int(page_number))
     data = dict()

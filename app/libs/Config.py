@@ -1,7 +1,7 @@
 import logging
 import os
 
-DATA_SAVE_DIR = 'datas'
+DATA_SAVE_DIR = 'app/static/images'
 # 线程池大小
 TASK_THREAD_POOL_SIZE = 5
 
