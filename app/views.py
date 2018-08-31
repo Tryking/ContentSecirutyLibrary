@@ -68,6 +68,7 @@ def query_data():
 def request_read_text_check(search_string):
     url = TEXT_CHECK_URL % search_string
     result = requests.get(url=url)
+    db_monitor.save_text_result(search_string, str(result.content, encoding='utf-8'))
     return result.content
 
 

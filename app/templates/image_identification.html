@@ -72,7 +72,7 @@
                             <th>
                                 <img id="image" src="/static/dist/img/icon.png" width="20%">
                             </th>
-                            <th id="file_name">文件</th>
+{#                            <th id="file_name">文件</th>#}
                             <th id="upload_time">上传时间</th>
                             <th id="politics">涉政</th>
                             <th id="porn">色情</th>
@@ -260,7 +260,7 @@
 
                         //给每一行赋值
                         row.find("#image").attr("src", obj[i].path.replace("app", ""));
-                        row.find("#file_name").text(obj[i].path);
+                        {#row.find("#file_name").text(obj[i].path);#}
                         row.find("#upload_time").text(obj[i].upload_time);
                         row.find("#porn").text(obj[i].porn);
                         {#row.find("#sexy").text(obj[i].sexy);#}

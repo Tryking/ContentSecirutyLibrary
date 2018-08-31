@@ -24,6 +24,13 @@ class DbMonitor:
                                                      'update_time': get_udpate_time()}},
                                     upsert=True)
 
+    def save_text_result(self, search_string, content):
+        self.db['text'].update_one(filter={'search_string': search_string},
+                                   update={'$set': {'result': content, 'upload_date': get_before_date(before_day=0),
+                                                    'upload_time': get_udpate_time(),
+                                                    'update_time': get_udpate_time()}},
+                                   upsert=True)
+
     def update_image_politics(self, file_path, cost, politics):
         """
         更新图像的涉政结果值
