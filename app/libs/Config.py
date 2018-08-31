@@ -19,11 +19,18 @@ MONGODB_PWD = ''
 # 现网部署修改
 # REMOTE_SFTP_PATH = os.path.join('tmp', 'identify_images')
 REMOTE_SFTP_PATH = '/tmp/identify_images'
-SFTP_HOST = '172.30.140.251'
-SFTP_PORT = 22
-TIMEOUT = 30
-SFTP_USER = 'root'
-SFTP_PWD = 'zaqwsx'
+SFTP_HOST_11 = '10.167.64.11'
+SFTP_PORT_11 = 22
+TIMEOUT_11 = 30
+SFTP_USER_11 = 'root'
+SFTP_PWD_11 = 'r00tme11'
 
-GPU_URL = 'http://www.baidu.com'
+SFTP_HOST_10 = '10.167.64.10'
+SFTP_PORT_10 = 22
+TIMEOUT_10 = 30
+SFTP_USER_10 = 'ironic'
+SFTP_PWD_10 = 'r00tme10'
+
+PORN_URL = 'http://10.167.64.11:8080/resnet/predict'
+POLITICS_URL = 'http://10.167.64.10:5000/detect?data=%s'
 TEXT_CHECK_URL = 'http://10.167.64.33:8888/lookfor?cont=%s'

@@ -24,13 +24,24 @@ class DbMonitor:
                                                      'update_time': get_udpate_time()}},
                                     upsert=True)
 
-    def update_image(self, file_path, cost, porn, sexy, normal):
+    def update_image_politics(self, file_path, cost, politics):
         """
-        更新图像的结果值
+        更新图像的涉政结果值
         """
         self.db['image'].update_one(filter={'path': file_path},
-                                    update={'$set': {'porn': porn, 'sexy': sexy, 'normal': normal, 'cost': cost, 'update_time': get_udpate_time(),
-                                                     'has_identify': True}}
+                                    update={
+                                        '$set': {'politics': politics, 'politics_cost': cost, 'update_time': get_udpate_time(),
+                                                 'has_identify': True}}
+                                    )
+
+    def update_image_porn(self, file_path, cost, porn, sexy, normal):
+        """
+        更新图像的鉴黄结果值
+        """
+        self.db['image'].update_one(filter={'path': file_path},
+                                    update={
+                                        '$set': {'porn': porn, 'sexy': sexy, 'normal': normal, 'porn_cost': cost, 'update_time': get_udpate_time(),
+                                                 'has_identify': True}}
                                     )
 
     def list_data(self, page_size, page_number):

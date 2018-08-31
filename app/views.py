@@ -121,13 +121,15 @@ def upload_images():
         # executor.submit(handle_images(request.files.getlist('file_data')))
         images = request.files.getlist('file_data')
         save_images = list()
+        save_image_paths = list()
         for image in images:
             file_name = get_random_str(3) + str(image.filename)
             file_path = os.path.join(DATA_SAVE_DIR, file_name)
             image.save(file_path)
             db_monitor.save_image(image_info={'path': file_path})
-            save_images.append(file_path)
-        handle_image_async(save_images)
+            save_images.append(file_name)
+            save_image_paths.append(file_path)
+        handle_image_async(save_images, save_image_paths)
         return json.dumps('{"state":"success"}'), 200
 
 
@@ -183,26 +185,50 @@ def transfer_file(image_paths):
     :param image_paths:
     :return:
     """
-    remote_dir = REMOTE_SFTP_PATH
-    local_paths = image_paths
-    sftp_monitor = SFTP()
-    if sftp_monitor.upload_file(remote_dir=remote_dir, local_paths=local_paths):
+    try:
+        remote_dir = REMOTE_SFTP_PATH
+        local_paths = image_paths
+        sftp_monitor = SFTP(host=SFTP_HOST_10, port=SFTP_PORT_10, user=SFTP_USER_10, pwd=SFTP_PWD_10)
+        sftp_monitor.upload_file(remote_dir=remote_dir, local_paths=local_paths)
+        sftp_monitor = SFTP(host=SFTP_HOST_11, port=SFTP_PORT_11, user=SFTP_USER_11, pwd=SFTP_PWD_11)
+        sftp_monitor.upload_file(remote_dir=remote_dir, local_paths=local_paths)
         return True
-    error('文件传送失败：%s' % str(local_paths))
-    return False
+    except Exception as e:
+        error('SFTP文件传送失败：%s' % str(image_paths))
+        error(str(e))
+        return False
 
 
-def send_request_gpu(remote_path, local_path):
+def get_politics_result(remote_path, local_path):
     """
-    给GPU机器发送请求
+    获取涉政结果
     """
     try:
-        debug('发送GPU请求：%s' % remote_path)
+        debug('获取涉政结果请求：%s' % remote_path)
+        start = time.time()
+        url = POLITICS_URL % remote_path.replace('/', '%2F')
+        result = requests.get(url=url, timeout=20)
+        if result.status_code == 200:
+            result = json.loads(result.content)
+            politics = result['result']
+            cost = round((time.time() - start), 2)
+            db_monitor.update_image_politics(local_path, cost, politics)
+
+    except Exception as e:
+        error(str(e), get_current_func_name())
+
+
+def get_porn_result(remote_path, local_path):
+    """
+    获取鉴黄结果
+    """
+    try:
+        debug('获取鉴黄结果请求：%s' % remote_path)
         data = {'data': remote_path}
         start = time.time()
-        result = requests.post(url=GPU_URL, data=data, timeout=20)
+        result = requests.post(url=PORN_URL, data=data, timeout=20)
         if result.status_code == 200:
-            result = json.loads(result)
+            result = json.loads(result.content)
             porn, sexy, normal = 0, 0, 0
             for item in result['prediction'][0]:
                 probability = item['probability']
@@ -213,24 +239,25 @@ def send_request_gpu(remote_path, local_path):
                 if item['class'] == 'normal':
                     normal = probability
             cost = round((time.time() - start), 2)
-            db_monitor.update_image(local_path, cost, porn, sexy, normal)
+            db_monitor.update_image_porn(local_path, cost, porn, sexy, normal)
 
     except Exception as e:
         error(str(e), get_current_func_name())
 
 
 @async
-def handle_image_async(image_paths):
+def handle_image_async(image_names, image_paths):
     """
     后台处理任务（请求接口）
     """
     # 传送文件
     if transfer_file(image_paths):
         # 传送成功才发送请求
-        for image_path in image_paths:
+        for image_path in image_names:
             remote_path = os.path.join(REMOTE_SFTP_PATH, image_path)
             local_path = os.path.join(DATA_SAVE_DIR, image_path)
-            send_request_gpu(remote_path, local_path)
+            get_porn_result(remote_path, local_path)
+            get_politics_result(remote_path, local_path)
 
 
 def write_file_log(msg, module='', level='error'):

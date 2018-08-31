@@ -1,15 +1,18 @@
 import os
 
-from .Config import *
 from .common import *
 import paramiko
 
 
 class SFTP:
-    def __init__(self):
+    def __init__(self, host, port, user, pwd):
         self.module = self.__class__.__name__
         self.sftp = None
         self.handle = None
+        self.host = host
+        self.port = port
+        self.user = user
+        self.pwd = pwd
 
     def get_connection(self):
         """
@@ -18,8 +21,8 @@ class SFTP:
         """
         if not self.sftp:
             try:
-                self.handle = paramiko.Transport((SFTP_HOST, SFTP_PORT))
-                self.handle.connect(username=SFTP_USER, password=SFTP_PWD)
+                self.handle = paramiko.Transport((self.host, self.port))
+                self.handle.connect(username=self.user, password=self.pwd)
                 self.sftp = paramiko.SFTPClient.from_transport(self.handle)
                 self.debug("connection success")
             except Exception as e:
@@ -53,10 +56,11 @@ class SFTP:
                     file_name = os.path.basename(local_path)
                     remote_path = os.path.join(remote_dir, file_name)
                     self.sftp.put(local_path, remote_path)
-                    self.debug('文件上传成功：%s' % remote_path)
+                    self.debug('%s,文件上传成功：%s' % (self.host, remote_path))
                 self.close_connection()
                 return True
             except Exception as e:
+                self.error('%s,文件上传失败：%s' % (self.host, remote_dir))
                 self.error(str(e), get_current_func_name())
                 return False
 
